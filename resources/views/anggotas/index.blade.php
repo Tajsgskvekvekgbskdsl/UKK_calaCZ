@@ -46,14 +46,70 @@
                         <td>{{ $anggota->user->email ?? '-' }}</td>
                         <td class="text-center">
                             <div class="btn-group btn-group-sm">
-                                <a href="{{ route('admin.anggota.show', $anggota) }}" class="btn btn-outline-info" title="Detail"><i class="bi bi-eye"></i></a>
-                                <a href="{{ route('admin.anggota.edit', $anggota) }}" class="btn btn-outline-warning" title="Edit"><i class="bi bi-pencil"></i></a>
-                                <form method="POST" action="{{ route('admin.anggota.destroy', $anggota) }}"
-                                    onsubmit="return confirm('Yakin hapus anggota ini beserta akunnya?');" class="d-inline">
+
+                                {{-- LIHAT --}}
+                                <a
+                                    href="{{ route('admin.anggota.show', $anggota) }}"
+                                    class="btn btn-sm btn-outline-info"
+                                    title="Detail"
+                                    style="
+                                        width:34px;
+                                        height:34px;
+                                        padding:0;
+                                        display:flex;
+                                        align-items:center;
+                                        justify-content:center;
+                                        border-radius:6px 0 0 6px;
+                                    "
+                                >
+                                    <i class="bi bi-eye"></i>
+                                </a>
+
+                                {{-- EDIT --}}
+                                <a
+                                    href="{{ route('admin.anggota.edit', $anggota) }}"
+                                    class="btn btn-sm btn-outline-warning"
+                                    title="Edit"
+                                    style="
+                                        width:34px;
+                                        height:34px;
+                                        padding:0;
+                                        display:flex;
+                                        align-items:center;
+                                        justify-content:center;
+                                        border-radius:0;
+                                    "
+                                >
+                                    <i class="bi bi-pencil"></i>
+                                </a>
+
+                                {{-- HAPUS --}}
+                                <form
+                                    method="POST"
+                                    action="{{ route('admin.anggota.destroy', $anggota) }}"
+                                    onsubmit="return confirm('Yakin hapus anggota ini beserta akunnya?');"
+                                >
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="btn btn-outline-danger" title="Hapus"><i class="bi bi-trash"></i></button>
+
+                                    <button
+                                        type="submit"
+                                        class="btn btn-sm btn-outline-danger"
+                                        title="Hapus"
+                                        style="
+                                            width:34px;
+                                            height:34px;
+                                            padding:0;
+                                            display:flex;
+                                            align-items:center;
+                                            justify-content:center;
+                                            border-radius:0 6px 6px 0;
+                                        "
+                                    >
+                                        <i class="bi bi-trash"></i>
+                                    </button>
                                 </form>
+
                             </div>
                         </td>
                     </tr>
@@ -69,3 +125,4 @@
     @endif
 </div>
 @endsection
+

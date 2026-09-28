@@ -152,10 +152,7 @@
 
                         {{-- AKSI --}}
                         <td class="text-center">
-                            <div
-                                class="d-inline-flex align-items-center"
-                                style="margin:0; padding:0;"
-                            >
+                            <div class="btn-group btn-group-sm">
 
                                 {{-- DETAIL --}}
                                 <a
@@ -188,7 +185,6 @@
                                         align-items:center;
                                         justify-content:center;
                                         border-radius:0;
-                                        margin-left:-1px;
                                     "
                                 >
                                     <i class="bi bi-pencil"></i>
@@ -199,11 +195,6 @@
                                     method="POST"
                                     action="{{ route('admin.buku.destroy', $buku) }}"
                                     onsubmit="return confirm('Yakin hapus buku ini?');"
-                                    style="
-                                        display:flex;
-                                        margin:0 0 0 -1px;
-                                        padding:0;
-                                    "
                                 >
                                     @csrf
                                     @method('DELETE')

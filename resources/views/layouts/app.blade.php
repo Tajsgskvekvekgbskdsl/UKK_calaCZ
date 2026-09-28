@@ -513,7 +513,7 @@
                     <li>
                         <a class="nav-link py-1 ps-5"
                            href="{{ route('admin.report.dashboard') }}">
-                            Statistik Perpustarikan
+                            Statistik Perpustakaan
                         </a>
                     </li>
 
