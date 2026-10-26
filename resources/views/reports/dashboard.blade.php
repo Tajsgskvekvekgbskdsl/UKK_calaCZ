@@ -33,7 +33,7 @@
     </div>
     <div class="col-md-4">
         <div class="card text-center py-3 h-100">
-            <small class="text-muted">Peminjaman Hari Ini</small><h4 class="mb-0" style="color:#111827;">{{ $peminjamanHariIni }}</h4>
+            <small class="text-muted">Peminjaman Hari Ini</small><h4 class="mb-0" style="color:#115cff;">{{ $peminjamanHariIni }}</h4>
         </div>
     </div>
     <div class="col-md-4">

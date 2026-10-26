@@ -21,6 +21,33 @@
                         <tr><th>Tanggal Kembali</th><td>{{ $transaksi->tgl_kembali ? \Carbon\Carbon::parse($transaksi->tgl_kembali)->format('d M Y') : '-' }}</td></tr>
                         <tr><th>Status</th>
                             <td><span class="badge {{ $transaksi->status === 'dipinjam' ? 'bg-primary' : 'bg-success' }}">{{ ucfirst($transaksi->status) }}</span></td></tr>
+                        <tr><th>Tanggal Jatuh Tempo</th><td>{{ $transaksi->tgl_jatuh_tempo?->format('d M Y') ?? '-' }}</td></tr>
+                        <tr><th>Hari Terlambat</th>
+                            <td>
+                                {{ $transaksi->hari_terlambat }} hari
+                                @if($transaksi->is_terlambat)
+                                    <span class="badge-soft red ms-1">Terlambat</span>
+                                @endif
+                            </td>
+                        </tr>
+                        <tr><th>Denda</th>
+                            <td>
+                                @if($transaksi->isAktif())
+                                    @if($transaksi->estimasi_denda > 0)
+                                        <span class="fw-bold text-danger">Estimasi: Rp{{ number_format($transaksi->estimasi_denda, 0, ',', '.') }}</span>
+                                        <small class="text-muted d-block">{{ $transaksi->hari_terlambat }} hari belum dibayar</small>
+                                    @else
+                                        Rp0
+                                    @endif
+                                @else
+                                    @if($transaksi->denda > 0)
+                                        Rp{{ number_format($transaksi->denda, 0, ',', '.') }}
+                                    @else
+                                        Rp0
+                                    @endif
+                                @endif
+                            </td>
+                        </tr>
                     </tbody>
                 </table>
 

@@ -19,7 +19,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     {{-- Stylesheet utama website perpustakaan (halaman user) --}}
-    <link href="{{ asset('css/perpus-site.css') }}?v=2.1" rel="stylesheet">
+    <link href="{{ asset('css/perpus-site.css') }}?v=2.2" rel="stylesheet">
 </head>
 <body class="site-body">
 

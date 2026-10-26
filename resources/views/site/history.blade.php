@@ -55,6 +55,7 @@
                                 <th>Tanggal Pinjam</th>
                                 <th>Tanggal Kembali</th>
                                 <th>Status</th>
+                                <th class="text-end">Denda</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -73,6 +74,9 @@
                                         @else
                                             <span class="badge-soft green">Dikembalikan</span>
                                         @endif
+                                    </td>
+                                    <td class="text-end">
+                                        {{ $t->denda > 0 ? 'Rp' . number_format($t->denda, 0, ',', '.') : 'Rp0' }}
                                     </td>
                                 </tr>
                             @endforeach

@@ -32,9 +32,11 @@
                     <th>Anggota</th>
                     <th>Buku</th>
                     <th>Tgl Pinjam</th>
-                    <th>Tgl Kembali</th>
+                    <th>Jatuh Tempo</th>
+<th>Tgl Kembali</th>
                     <th>Status</th>
-                    <th class="text-center">Aksi</th>
+                    <th class="text-end">Denda</th>
+<th class="text-center">Aksi</th>
                 </tr>
             </thead>
             <tbody>
@@ -47,12 +49,27 @@
                         </td>
                         <td>{{ $t->buku->judul_buku ?? '-' }}</td>
                         <td>{{ \Carbon\Carbon::parse($t->tgl_pinjam)->format('d M Y') }}</td>
+                            <td>{{ $t->tgl_jatuh_tempo?->format('d M Y') ?? '-' }}</td>
+
                         <td>{{ $t->tgl_kembali ? \Carbon\Carbon::parse($t->tgl_kembali)->format('d M Y') : '-' }}</td>
                         <td>
                             <span class="badge {{ $t->status === 'dipinjam' ? 'bg-primary' : 'bg-success' }}">
                                 {{ ucfirst($t->status) }}
                             </span>
                         </td>
+                            <td class="text-end">
+                                @if($t->isAktif())
+                                    @if($t->estimasi_denda > 0)
+                                        <span class="fw-bold text-danger">Rp{{ number_format($t->estimasi_denda, 0, ',', '.') }}</span>
+                                        <small class="d-block">{{ $t->hari_terlambat }} hari</small>
+                                    @else
+                                        Rp0
+                                    @endif
+                                @else
+                                    {{ $t->denda > 0 ? 'Rp'.number_format($t->denda, 0, ',', '.') : 'Rp0' }}
+                                @endif
+                            </td>
+
                         <td class="text-center">
                             <div class="btn-group btn-group-sm">
                                 <a
@@ -115,7 +132,7 @@
                         </td>
                     </tr>
                 @empty
-                    <tr><td colspan="7" class="text-center text-muted py-4">Data transaksi tidak ditemukan.</td></tr>
+                    <tr><td colspan="8" class="text-center text-muted py-4">Data transaksi tidak ditemukan.</td></tr>
                 @endforelse
             </tbody>
         </table>

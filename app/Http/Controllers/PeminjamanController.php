@@ -95,6 +95,9 @@ class PeminjamanController extends Controller
                     'id_anggota' => $anggota->id_anggota,
                     'id_buku' => $buku->id_buku,
                     'tgl_pinjam' => now()->toDateString(),
+                    'tgl_jatuh_tempo' => now()
+                        ->addDays(config('denda.batas_peminjaman_hari', 7))
+                        ->toDateString(),
                     'tgl_kembali' => null,
                     'status' => 'dipinjam',
                 ]);
@@ -117,6 +120,7 @@ class PeminjamanController extends Controller
         }
 
         return redirect()->route('user.peminjaman.index')
-            ->with('success', "Buku \"{$judul}\" berhasil dipinjam! Silakan kembalikan maksimal 7 hari.");
+            ->with('success', "Buku \"{$judul}\" berhasil dipinjam! Silakan kembalikan maksimal "
+                . config('denda.batas_peminjaman_hari', 7) . " hari.");
     }
 }

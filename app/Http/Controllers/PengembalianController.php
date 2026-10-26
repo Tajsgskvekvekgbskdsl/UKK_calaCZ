@@ -67,9 +67,16 @@ class PengembalianController extends Controller
                 return;
             }
 
+            // Hitung denda keterlambatan dari tanggal jatuh tempo sampai
+            // tanggal pengembalian aktual. Tak terlambat / tepat waktu -> 0.
+            // Denda dihitung hanya berdasarkan hari kalender penuh.
+            $tglKembali = now()->toDateString();
+            $denda = Transaksi::hitungDenda($t->tgl_pinjam, $t->tgl_jatuh_tempo, $tglKembali);
+
             $t->update([
                 'status' => 'dikembalikan',
-                'tgl_kembali' => now()->toDateString(),
+                'tgl_kembali' => $tglKembali,
+                'denda' => $denda,
             ]);
 
             // Stok buku +1.
@@ -81,7 +88,11 @@ class PengembalianController extends Controller
                 ->with('error', 'Buku ini sudah dikembalikan sebelumnya.');
         }
 
-        return redirect()->route('user.pengembalian.index')
-            ->with('success', 'Buku berhasil dikembalikan. Terima kasih!');
+        $pesan = 'Buku berhasil dikembalikan. Terima kasih!';
+        if ($denda > 0) {
+            $pesan .= ' Denda keterlambatan: Rp' . number_format($denda, 0, ',', '.');
+        }
+
+        return redirect()->route('user.pengembalian.index')->with('success', $pesan);
     }
 }

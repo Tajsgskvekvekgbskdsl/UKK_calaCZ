@@ -31,12 +31,13 @@
                                 <th>Tgl Pinjam</th>
                                 <th>Batas Kembali</th>
                                 <th>Status</th>
+                                <th class="text-end">Estimasi Denda</th>
                                 <th class="text-end">Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach($peminjamans as $i => $t)
-                                @php($batas = $t->tgl_pinjam->copy()->addDays(7))
+                                @php($batas = $t->tgl_jatuh_tempo ?? optional($t->tgl_pinjam)->addDays(config('denda.batas_peminjaman_hari', 7)))
                                 <tr>
                                     <td>{{ $peminjamans->firstItem() + $i }}</td>
                                     <td>
@@ -45,12 +46,23 @@
                                     </td>
                                     <td>{{ $t->tgl_pinjam->format('d M Y') }}</td>
                                     <td>
-                                        {{ $batas->format('d M Y') }}
-                                        @if(now()->gt($batas))
+                                        {{ $batas ? $batas->format('d M Y') : '-' }}
+                                        @if($t->is_terlambat)
                                             <span class="badge-soft red ms-1">Terlambat</span>
+                                        @else
+                                            <span class="badge-soft green ms-1">Tepat waktu</span>
                                         @endif
                                     </td>
                                     <td><span class="badge-soft blue">Dipinjam</span></td>
+                                    @php($denda = $t->estimasi_denda)
+                                    <td class="text-end">
+                                        @if($denda > 0)
+                                            <span class="fw-bold text-danger">Rp{{ number_format($denda, 0, ',', '.') }}</span>
+                                            <small class="text-muted d-block">{{ $t->hari_terlambat }} hari</small>
+                                        @else
+                                            <span class="text-muted">Rp0</span>
+                                        @endif
+                                    </td>
                                     <td class="text-end">
                                         <a href="{{ route('user.pengembalian.index') }}"
                                             class="btn btn-sm btn-green">Kembalikan</a>

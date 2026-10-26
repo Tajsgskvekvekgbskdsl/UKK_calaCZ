@@ -6,6 +6,7 @@ use App\Models\Anggota;
 use App\Models\Buku;
 use App\Models\Transaksi;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 
@@ -82,6 +83,9 @@ class TransaksiController extends Controller
             }
 
             Transaksi::create(array_merge($data, [
+                'tgl_jatuh_tempo' => Carbon::parse($data['tgl_pinjam'])
+                    ->addDays(config('denda.batas_peminjaman_hari', 7))
+                    ->toDateString(),
                 'tgl_kembali' => null,
                 'status' => 'dipinjam',
             ]));
@@ -175,12 +179,23 @@ class TransaksiController extends Controller
                 $tglKembali = now()->toDateString();
             }
 
+            // Tanggal jatuh tempo = tgl_pinjam + batas peminjaman (konfigurasi).
+            // Denda hanya diitung bila status sudah 'dikembalikan'; tidak boleh negatif.
+            $jatuhTempo = Carbon::parse($data['tgl_pinjam'])
+                ->addDays(config('denda.batas_peminjaman_hari', 7));
+
+            $denda = ($data['status'] === 'dikembalikan')
+                ? Transaksi::hitungDenda($data['tgl_pinjam'], $jatuhTempo, $tglKembali)
+                : 0;
+
             $transaksi->update([
                 'id_anggota' => $data['id_anggota'],
                 'id_buku' => $newBuku->id_buku,
                 'tgl_pinjam' => $data['tgl_pinjam'],
+                'tgl_jatuh_tempo' => $jatuhTempo->toDateString(),
                 'tgl_kembali' => $tglKembali,
                 'status' => $data['status'],
+                'denda' => $denda,
             ]);
         });
 

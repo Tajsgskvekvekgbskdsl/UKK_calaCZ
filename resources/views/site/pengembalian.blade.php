@@ -26,7 +26,9 @@
                                 <th>No</th>
                                 <th>Buku</th>
                                 <th>Tgl Pinjam</th>
+                                <th>Jatuh Tempo</th>
                                 <th>Lama Pinjam</th>
+                                <th class="text-end">Denda</th>
                                 <th class="text-end">Aksi</th>
                             </tr>
                         </thead>
@@ -40,12 +42,22 @@
                                         <small class="text-muted">{{ $t->buku->pengarang }}</small>
                                     </td>
                                     <td>{{ $t->tgl_pinjam->format('d M Y') }}</td>
+                                    <td>{{ $t->tgl_jatuh_tempo?->format('d M Y') ?? '-' }}</td>
                                     <td>
                                         {{ $hari }} hari
-                                        @if($hari > 7)
+                                        @if($t->is_terlambat)
                                             <span class="badge-soft red ms-1">Terlambat</span>
                                         @else
                                             <span class="badge-soft green ms-1">Tepat waktu</span>
+                                        @endif
+                                    </td>
+                                    @php($denda = $t->estimasi_denda)
+                                    <td class="text-end">
+                                        @if($denda > 0)
+                                            <span class="fw-bold text-danger">Rp{{ number_format($denda, 0, ',', '.') }}</span>
+                                            <small class="text-muted d-block">{{ $t->hari_terlambat }} hari</small>
+                                        @else
+                                            <span class="text-muted">Rp0</span>
                                         @endif
                                     </td>
                                     <td class="text-end">
